@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+# Ensure .env file exists so Laravel key:generate does not fail
+if [ ! -f /var/www/html/.env ]; then
+    touch /var/www/html/.env
+fi
+
 # Update apache port to Render's dynamic PORT if provided
 if [ -n "$PORT" ]; then
     sed -i "s/80/$PORT/g" /etc/apache2/ports.conf /etc/apache2/sites-available/*.conf
@@ -11,12 +16,13 @@ mkdir -p /var/www/html/storage/framework/sessions
 mkdir -p /var/www/html/storage/framework/views
 mkdir -p /var/www/html/storage/framework/cache
 mkdir -p /var/www/html/storage/logs
-chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/.env
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+chmod 664 /var/www/html/.env
 
 # Generate key if not provided
 if [ -z "$APP_KEY" ]; then
-    php artisan key:generate --force
+    php artisan key:generate --force || true
 fi
 
 # Run caching optimizations safely

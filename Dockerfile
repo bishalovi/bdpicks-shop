@@ -35,12 +35,16 @@ WORKDIR /var/www/html
 # Copy application files
 COPY . /var/www/html
 
+# Ensure .env exists
+RUN touch /var/www/html/.env
+
 # Install Composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction || true
 
-# Set proper permissions for storage and bootstrap/cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Set proper permissions for storage, bootstrap/cache, and .env
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/.env \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod 664 /var/www/html/.env
 
 # Copy entrypoint script
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
