@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: bdpicks-ecommerce
+    env: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    envVars:
+      - key: APP_NAME
+        value: 'Biz Care IT'
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: 'false'
+      - key: APP_URL
+        value: https://bdpicks-ecommerce.onrender.com
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_PORT
+        value: '3306'
+      - key: DB_HOST
+        sync: false
+      - key: DB_DATABASE
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false

@@ -1,0 +1,10 @@
+.git
+.github
+node_modules
+error_log
+borolok1_bdpicks.sql
+.env
+.env.example
+.editorconfig
+phpunit.xml
+tests
