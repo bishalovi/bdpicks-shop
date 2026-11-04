@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Ensure .env file exists so Laravel key:generate does not fail
+# Ensure .env file exists
 if [ ! -f /var/www/html/.env ]; then
     touch /var/www/html/.env
 fi
@@ -20,14 +20,9 @@ chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 chmod 664 /var/www/html/.env
 
-# Generate key if not provided
-if [ -z "$APP_KEY" ]; then
-    php artisan key:generate --force || true
-fi
-
-# Run caching optimizations safely
-php artisan config:cache || true
-php artisan route:cache || true
-php artisan view:cache || true
+# Always clear config cache on startup so Render environment variables are dynamically read
+php artisan config:clear || true
+php artisan cache:clear || true
+php artisan view:clear || true
 
 exec apache2-foreground
