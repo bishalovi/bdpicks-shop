@@ -48,5 +48,6 @@ chmod 664 /var/www/html/.env
 php artisan config:clear || true
 php artisan cache:clear || true
 php artisan view:clear || true
+php artisan storage:link || true
 
 exec apache2-foreground
